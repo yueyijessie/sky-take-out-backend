@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
@@ -78,9 +79,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
         // 设置当前创建人id和修改人id
-        // TODO 后期需要改为当前登录用户的id
-        employee.setCreateUser(10L);
-        employee.setUpdateUser(10L);
+        // 从threadlocal取出当前用户id
+        employee.setCreateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());
 
         employeeMapper.insert(employee);
     }

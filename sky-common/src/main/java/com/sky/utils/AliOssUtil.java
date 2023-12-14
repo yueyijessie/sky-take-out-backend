@@ -4,20 +4,25 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
+import com.aliyun.oss.common.auth.CredentialsProviderFactory;
+import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
+import com.sky.properties.AliOssProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.io.ByteArrayInputStream;
 
 @Data
 @AllArgsConstructor
+@Component
 @Slf4j
 public class AliOssUtil {
 
-    private String endpoint;
-    private String accessKeyId;
-    private String accessKeySecret;
-    private String bucketName;
+    @Autowired
+    private AliOssProperties aliOssProperties;  // 直接绑定AliOSSProperties bean对象
 
     /**
      * 文件上传
@@ -26,10 +31,16 @@ public class AliOssUtil {
      * @param objectName
      * @return
      */
-    public String upload(byte[] bytes, String objectName) {
+    public String upload(byte[] bytes, String objectName) throws Exception {
+
+        // 获取阿里云参数
+        String endpoint = aliOssProperties.getEndpoint();
+        String bucketName = aliOssProperties.getBucketName();
 
         // 创建OSSClient实例。
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        // OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        EnvironmentVariableCredentialsProvider credentialsProvider = CredentialsProviderFactory.newEnvironmentVariableCredentialsProvider();
+        OSS ossClient = new OSSClientBuilder().build(endpoint, credentialsProvider);
 
         try {
             // 创建PutObject请求。

@@ -9,6 +9,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -109,5 +110,22 @@ public class DishServiceImpl implements DishService {
         // 根据菜品id集合批量删除关联的口味
         dishFlavorMapper.deleteByDishIds(ids);
 
+    }
+
+    /**
+     * 根据id查询菜品和对应口味
+     * @param id
+     * @return
+     */
+    public DishVO getById(Long id){
+        Dish dish = dishMapper.getById(id);
+        List<DishFlavor> flavorList = dishFlavorMapper.getByDishId(id);
+
+        // 封装dishvo
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish,dishVO);
+        dishVO.setFlavors(flavorList);
+
+        return dishVO;
     }
 }

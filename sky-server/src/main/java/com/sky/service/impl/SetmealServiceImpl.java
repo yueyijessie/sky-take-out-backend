@@ -2,10 +2,14 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
@@ -39,12 +43,12 @@ public class SetmealServiceImpl implements SetmealService {
         setmealMapper.insert(setmeal);
         // 获取刚插入的套餐id
         Long setmealId = setmeal.getId();
-        // 向setmeal_dish插入数据
-        List<SetmealDish> setmealDishList = setmealDTO.getSetmealDishes();
-        for (SetmealDish setmealDish : setmealDishList) {
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> {
             setmealDish.setSetmealId(setmealId);
-            setmealDishMapper.insert(setmealDish);
-        }
+        });
+        //保存套餐和菜品的关联关系
+        setmealDishMapper.insertBatch(setmealDishes);
     }
 
     /**
@@ -60,5 +64,26 @@ public class SetmealServiceImpl implements SetmealService {
         long total = page.getTotal();
         List<SetmealVO> records = page.getResult();
         return new PageResult(total, records);
+    }
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     */
+    @Transactional
+    public void deleteByIds(List<Long> ids){
+        // 判断是否启售
+        for (Long id : ids) {
+            Setmeal setmeal = setmealMapper.getById(id);
+            if (setmeal.getStatus() == StatusConstant.ENABLE){
+                // 当前套餐在启售
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+            }
+        }
+        // 批量删除套餐
+        for (Long id : ids) {
+            setmealMapper.deleteById(id); // 删除setmeal表
+            setmealDishMapper.deleteBySetmealId(id); // 删除setmeal dish表
+        }
     }
 }

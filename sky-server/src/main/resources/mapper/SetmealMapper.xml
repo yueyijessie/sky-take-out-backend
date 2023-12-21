@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetmealMapper">
+    <insert id="insert">
+        insert into setmeal
+        (name, category_id, price, image, description, status, create_time, create_user, update_time, update_user)
+        values
+        (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser})
+    </insert>
 
     <update id="update">
         update setmeal

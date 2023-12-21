@@ -19,9 +19,16 @@ public interface SetmealMapper {
     Integer countByCategoryId(Long id);
 
     /**
-     *
+     * 修改套餐
      * @param setmeal
      */
     @AutoFill(OperationType.UPDATE)
     void update(Setmeal setmeal);
+
+    /**
+     * 插入套餐
+     * @param setmeal
+     */
+    @AutoFill(OperationType.INSERT)
+    void insert(Setmeal setmeal);
 }

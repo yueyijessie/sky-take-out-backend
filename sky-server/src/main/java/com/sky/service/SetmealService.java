@@ -1,7 +1,8 @@
 package com.sky.service;
 
 import com.sky.dto.SetmealDTO;
-import org.springframework.stereotype.Service;
+import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.result.PageResult;
 
 public interface SetmealService {
 
@@ -10,4 +11,11 @@ public interface SetmealService {
      * @param setmealDTO
      */
     void create(SetmealDTO setmealDTO);
+
+    /**
+     * 分页查询套餐
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 }

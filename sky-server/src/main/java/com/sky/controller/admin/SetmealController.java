@@ -66,4 +66,15 @@ public class SetmealController {
         return Result.success();
     }
 
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("套餐启售停售")
+    public Result enableOrDisable(@PathVariable Integer status, Long id){
+        setmealService.enableOrDisable(status, id);
+        return Result.success();
+    }
+
+
+
+
 }

@@ -68,4 +68,12 @@ public interface DishMapper {
 
     @Select("select * from dish where category_id = #{categoryId}")
     List<Dish> getByCategoryId(Integer categoryId);
+
+    /**
+     * 根据setmeal id查询相关dish的status是否为0，为0则throw
+     * @param setmealId
+     * @return
+     */
+    @Select("select dish.* from dish join setmeal_dish s on dish.id = s.dish_id where s.setmeal_id = #{setmealId}")
+    List<Dish> getBySetmealId(Long setmealId);
 }

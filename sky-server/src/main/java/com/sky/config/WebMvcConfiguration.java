@@ -54,10 +54,29 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
                 // 指定生成接口需要扫描的包
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
+    @Bean
+    public Docket docketuser() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("苍穹外卖项目接口文档")
+                .version("2.0")
+                .description("苍穹外卖项目接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口") // 添加分组
+                .apiInfo(apiInfo)
+                .select()
+                // 指定生成接口需要扫描的包
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;

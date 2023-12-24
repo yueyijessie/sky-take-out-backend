@@ -37,3 +37,19 @@
     - `scard key` 获取集合的成员数
     - `sinter key1 key2` 返回给定所有集合的交集
     - `sunion key1 key2` 返回所有给定集合的并集
+    - `srem key member1 member2` 删除集合中一个或多个成员
+
+
+- Zset操作命令
+  - `zadd key score1 member1 score2 member2` 向有序集合添加一个或多个成员
+  - `zrange key start stop [withscores]` 通过索引区间返回有序集合中指定区间内的成员
+  - `zincrby key increment member` 有序集合中对指定成员的分数加上增量increment
+  - `zrem key member1 member2` 删除有序集合中的一个或多个成员
+
+
+- 通用命令
+  - `keys pattern` 查找符合给定pattern的key
+    - `keys set*` 匹配set开头的key
+  - `exists key` 检查key是否存在
+  - `type key` 返回key储存值的类型
+  - `del key` 删除

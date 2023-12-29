@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
@@ -334,6 +335,19 @@ public class OrderServiceImpl implements OrderService {
                                 .deliveryInProgress(deliveryInProgress)
                                 .toBeConfirmed(toBeConfirmed)
                                 .build();
+    }
+
+    /**
+     * 接单
+     * @param ordersConfirmDTO
+     */
+    public void confirm(OrdersConfirmDTO ordersConfirmDTO){
+        // 将订单的状态修改为“已接单”
+        Orders orders = Orders.builder()
+                        .id(ordersConfirmDTO.getId())
+                        .status(Orders.CONFIRMED)
+                        .build();
+        orderMapper.update(orders);
     }
 
 }

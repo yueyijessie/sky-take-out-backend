@@ -5,10 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersConfirmDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -30,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -347,6 +345,37 @@ public class OrderServiceImpl implements OrderService {
                         .id(ordersConfirmDTO.getId())
                         .status(Orders.CONFIRMED)
                         .build();
+        orderMapper.update(orders);
+    }
+
+
+    /**
+     * 拒单
+     * @param ordersRejectionDTO
+     */
+    public void reject(OrdersRejectionDTO ordersRejectionDTO){
+        // 处于“待接单”状态时可以执行拒单操作
+        Orders orders = orderMapper.getById(ordersRejectionDTO.getId());
+        if (!Objects.equals(orders.getStatus(), Orders.TO_BE_CONFIRMED)){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 如果用户已经完成了支付，需要为用户退款(业务逻辑上，用户一定是完成支付的)
+        if (orders.getPayStatus() == Orders.PAID){
+            //用户已支付，需要退款
+            // String refund = weChatPayUtil.refund(
+            //         orders.getNumber(),
+            //         orders.getNumber(),
+            //         new BigDecimal(0.01),
+            //         new BigDecimal(0.01));
+            orders.setPayStatus(Orders.REFUND);
+        }
+
+        // 将订单状态修改为“已取消”
+        orders.setStatus(Orders.CANCELLED);
+        orders.setRejectionReason(ordersRejectionDTO.getRejectionReason());
+        orders.setCancelReason(ordersRejectionDTO.getRejectionReason());
+        orders.setCancelTime(LocalDateTime.now());
         orderMapper.update(orders);
     }
 

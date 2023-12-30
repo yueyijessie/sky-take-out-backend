@@ -403,4 +403,21 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+    /**
+     * 派送订单
+     * @param id
+     */
+    public void delivery(Long id){
+        // 只有状态为“待派送”的订单可以执行派送订单操作
+        Orders orders = orderMapper.getById(id);
+        if (orders == null  || orders.getStatus() != Orders.CONFIRMED){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        // 订单状态修改为“派送中”
+        orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orderMapper.update(orders);
+    }
+
+
+
 }

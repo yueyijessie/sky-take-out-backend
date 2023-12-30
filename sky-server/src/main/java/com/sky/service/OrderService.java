@@ -85,4 +85,10 @@ public interface OrderService {
      * @param ordersCancelDTO
      */
     void cancleByAdmin(OrdersCancelDTO ordersCancelDTO);
+
+    /**
+     * 派送订单
+     * @param id
+     */
+    void delivery(Long id);
 }

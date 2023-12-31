@@ -8,8 +8,11 @@ import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -64,4 +67,12 @@ public interface OrderMapper {
      */
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> getTimeoutOrders(Integer status, LocalDateTime orderTime);
+
+
+    /**
+     * 根据map的值查询营业额
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
 }

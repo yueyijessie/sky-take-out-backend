@@ -1,7 +1,9 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
@@ -82,4 +84,11 @@ public interface OrderMapper {
      * @return
      */
     Integer countByMap(Map map);
+
+    /**
+     * 根据时间查询销量前十的商品
+     * @param map
+     * @return
+     */
+    List<GoodsSalesDTO> getTop10Dish(Map map);
 }

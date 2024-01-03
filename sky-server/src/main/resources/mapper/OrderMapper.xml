@@ -72,4 +72,17 @@
             <if test="status != null">and status = #{status}</if>
         </where>
     </select>
+
+    <select id="getTop10Dish" resultType="com.sky.dto.GoodsSalesDTO">
+        select sum(d.number) as number, d.name as name
+        from orders o join order_detail d on o.id = d.order_id
+        <where>
+            <if test="begin != null">and o.order_time &gt; #{begin}</if>
+            <if test="end != null">and o.order_time &lt; #{end}</if>
+            <if test="status != null">and o.status &lt; #{status}</if>
+        </where>
+        group by name
+        order by number desc
+        limit 0,10
+    </select>
 </mapper>

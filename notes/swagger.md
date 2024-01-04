@@ -6,8 +6,8 @@
 
 - 使用方法:
   1. 导入maven坐标: `knife4j-spring-boot-starter`
-  2. 配置类中加入knife4j相关配置: [WebMvcConfiguration.java](src/sky-server/src/main/java/com/sky/config/WebMvcConfiguration.java)中的docket和docketuser方法
-  3. 设置静态资源映射,否则接口文档页面无法访问: [WebMvcConfiguration.java](src/sky-server/src/main/java/com/sky/config/WebMvcConfiguration.java)中的addResourceHandlers方法(可以设置访问的页面路径)
+  2. 配置类中加入knife4j相关配置: [WebMvcConfiguration.java](sky-server/src/main/java/com/sky/config/WebMvcConfiguration.java)中的docket和docketuser方法
+  3. 设置静态资源映射,否则接口文档页面无法访问: [WebMvcConfiguration.java](sky-server/src/main/java/com/sky/config/WebMvcConfiguration.java)中的addResourceHandlers方法(可以设置访问的页面路径)
 
 
 - 常用注解(提高文档可读性)
